@@ -6,13 +6,22 @@ from django.template import loader
 
 import sys
 sys.path.append("../Tools")
-from plotDatabase import plotDatabase
+from Tools.plotDatabase import plotDatabase
 
 def index(request):
     """index function"""
-    #return HttpResponse("Hello, world. You're at the EnvData index.")
-    div, fig = plotDatabase()
-    template = loader.get_template('EnvData/index.html')
-    context = {'div': div}
-    #return HttpResponse(div)
+    # Load HTML page template
+    template = loader.get_template("EnvData/index.html")
+    context = {}
+    # Return HTML page with plot
     return render(request, "EnvData/index.html", context)
+
+def display(request):
+    """display function"""
+    # Get plot HTML code
+    div, fig = plotDatabase()
+    # Load HTML page template
+    template = loader.get_template("EnvData/display.html")
+    context = {'div': div}
+    # Return HTML page with plot
+    return render(request, "EnvData/display.html", context)
