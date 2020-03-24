@@ -8,8 +8,23 @@
 </head>
 <body>
   <h1>Temperature/humidity/pressure from BME280 sensor</h1>
+  <h2>Options:</h2>
+  <ul>
+    <li><a href="/EnvData/display/day">Day</a></li>
+    <li><a href="/EnvData/display/week">Week</a></li>
+    <li><a href="/EnvData/display/month">Month</a></li>
+    <li><a href="/EnvData/display/year">Year</a></li>
+    <li><a href="/EnvData/display/all">All</a></li>
+  </ul>
+  <h2>Plot:</h2>
   {% autoescape off %}
   {{div}}
   {% endautoescape %}
+  <button type="button" name="refresh" style="color: gray;" onClick="Refresh()">Refresh</button>
+  <script>
+    function Refresh() {
+      window.parent.location = window.parent.location.href;
+    }
+  </script>
 </body>
 </html>
