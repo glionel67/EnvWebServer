@@ -104,6 +104,9 @@ def getEnvDataSingleShot(databaseFileName):
 
 if __name__ == "__main__":
     databaseFileName = "envData.db"
+    if len(sys.argv) > 1:
+        databaseFileName = sys.argv[1]
+    #print("databaseFileName={}".format(databaseFileName))
     temp, hum, pres = getEnvDataSingleShot(databaseFileName)
     s = "T = {} °C, H = {} %, P = {} Pa".format(temp, hum, pres)
     print(s)

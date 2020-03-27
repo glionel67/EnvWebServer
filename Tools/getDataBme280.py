@@ -15,10 +15,11 @@ try:
     import digitalio
     import adafruit_bme280
 except:
+    #print("Print failed to import Raspberry Pi GPIO library!")
     pass
 
-def getDataBme280(databaseFileName):
-    """Get the data from the sensors and update the database"""
+def getDataBme280():
+    """Get the data from the BME280 sensor"""
 
     ### Init BME280 ###
     i2c = busio.I2C(board.SCL, board.SDA)
@@ -32,7 +33,7 @@ def getDataBme280(databaseFileName):
     bme280.overscan_temperature = adafruit_bme280.OVERSCAN_X1
 
     ### Get sensors data and save into database ###
-    nSamples = 5
+    nSamples = 3
 
     # Get sensors data
     samples = np.zeros((3, nSamples))
@@ -53,7 +54,6 @@ def getDataBme280(databaseFileName):
     return temp, hum, pres
 
 if __name__ == "__main__":
-    databaseFileName = "envData.db"
-    temp, hum, pres = getDataBme280(databaseFileName)
+    temp, hum, pres = getDataBme280()
     s = "T = {} °C, H = {} %, P = {} Pa".format(temp, hum, pres)
     print(s)
