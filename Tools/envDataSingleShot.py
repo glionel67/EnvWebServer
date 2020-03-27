@@ -9,14 +9,17 @@ import sqlite3 as sq
 import numpy as np
 
 # Adafruit
-import board
-import busio
-import digitalio
-import adafruit_bme280
-#import adafruit_ccs811
-#import adafruit_dht
+try:
+    import board
+    import busio
+    import digitalio
+    import adafruit_bme280
+    #import adafruit_ccs811
+    #import adafruit_dht
+except:
+    pass
 
-def getEnvDataSingleShot():
+def getEnvDataSingleShot(databaseFileName):
     """Get the data from the sensors and update the database"""
 
     ### Init BME280 ###
@@ -45,13 +48,7 @@ def getEnvDataSingleShot():
     ### Init DHT22 ###
     #dhtDevice = adafruit_dht.DHT22(board.D23)
 
-    ### Init database ###
-    database = "envData.db"
-    tableBme280 = "bme280"
-    #tableCcs811 = "ccs811"
-    #tableDht22 = "dht22"
-
-    ### Get sensors data and save into database
+    ### Get sensors data and save into database ###
     nSamples = 5
 
     # Get sensors data
@@ -71,7 +68,7 @@ def getEnvDataSingleShot():
         #    samples[3,i] = 0.0
         #    samples[4,i] = 0.0
 
-        print("BME280: {}".format(samples[:3,i].T))
+        #print("BME280: {}".format(samples[:3,i].T))
         #print("DHT22: {}".format(samples[3:].T))
 
         time.sleep(1)
@@ -80,7 +77,7 @@ def getEnvDataSingleShot():
     med = np.median(samples, axis=1)
     #print("med={}".format(med.T))
     temp, hum, pres = med[0], med[1], med[2]
-    print("BME280: T={} C, H={} %, P={} Pa".format(temp, hum, pres))
+    #print("BME280: T={} C, H={} %, P={} Pa".format(temp, hum, pres))
 
     #tempDht, humDht = med[3], med[4]
     #print("DHT22: T={}, H={} %".format(tempDht, humDht))
@@ -90,8 +87,8 @@ def getEnvDataSingleShot():
     #ccs811.eco2, ccs811.tvoc, ccs811.temperature))
 
     # Open database
-    print("Writing to database...")
-    conn = sq.connect(database)
+    #print("Writing to database: {}...".format(databaseFileName))
+    conn = sq.connect(databaseFileName)
     with conn:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO bme280 VALUES(datetime('now'), (?), (?), (?))", (temp, hum, pres))
@@ -101,11 +98,12 @@ def getEnvDataSingleShot():
         conn.commit()
         cursor.close()
     conn.close()
-    print("... done!")
+    #print("... done!")
 
     return temp, hum, pres
 
 if __name__ == "__main__":
-    temp, hum, pres = getEnvDataSingleShot()
-    s = "temperature={} °C, humidity={} %, pressure={} Pa".format(temp, hum, pres)
+    databaseFileName = "envData.db"
+    temp, hum, pres = getEnvDataSingleShot(databaseFileName)
+    s = "T = {} °C, H = {} %, P = {} Pa".format(temp, hum, pres)
     print(s)

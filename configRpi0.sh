@@ -31,7 +31,9 @@ sudo apt install -y python3 python3-dev python3-pip python3-picamera python3-num
 sudo apt install -y python-smbus python-mysqldb
 sudo apt install -y python-gpiozero python3-gpiozero python-pigpio python3-pigpio
 python -m pip install Django
+python3 -m pip install Django
 python -m pip install plotly==4.5.2
+python3 -m pip install plotly==4.5.2
 
 # Time/ntp
 sudo apt install ntp

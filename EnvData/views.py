@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-import random
-
 import sys
 sys.path.append("../Tools")
 from Tools.plotDatabase import plotDatabase
+from Tools.getDataBme280 import getDataBme280
+
+import random
 
 def index(request):
     """index function"""
@@ -62,9 +63,14 @@ def realtime(request):
 
 def update(request):
     """update function"""
-    temperature = str(random.gauss(21, 10))
-    humidity = str(random.gauss(50, 10))
-    pressure = str(random.gauss(1010, 10))
+    temperature, humidity, pressure = 0.0, 0.0, 0.0
+    try:
+        temperature, humidity, pressure = getDataBme280()
+    except:
+        print("Getting real data failed, using random values...")
+        temperature = str(random.gauss(21, 10))
+        humidity = str(random.gauss(50, 10))
+        pressure = str(random.gauss(1010, 10))
     s = str(temperature) + ";" + str(humidity) + ";" + str(pressure)
     return HttpResponse(s , status=200)
 
