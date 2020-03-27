@@ -106,4 +106,3 @@ while True:
     #print("... done!")
 
     time.sleep(1200) # 60s * 20 = 1200s = 20 min
-

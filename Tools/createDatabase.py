@@ -13,6 +13,6 @@ with conn:
     #cursor.execute("DROP TABLE IF EXISTS ccs811")
     #cursor.execute("CREATE TABLE ccs811 (date DATETIME, eco2 FLOAT, tvoc FLOAT, temperature FLOAT)")
 
-    cursor.execute("DROP TABLE IF EXISTS dht22")
-    cursor.execute("CREATE TABLE dht22 (date DATETIME, temperature FLOAT, humidity FLOAT)")
+    #cursor.execute("DROP TABLE IF EXISTS dht22")
+    #cursor.execute("CREATE TABLE dht22 (date DATETIME, temperature FLOAT, humidity FLOAT)")
 conn.close()
