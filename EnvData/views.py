@@ -2,12 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
+import json
+
 import sys
 sys.path.append("../Tools")
 from Tools.plotDatabase import plotDatabase
+from Tools.queryDatabase import queryDatabase
 from Tools.getDataBme280 import getDataBme280
 
 import random
+from datetime import datetime
 
 def index(request):
     """index function"""
@@ -24,33 +28,43 @@ def display(request, duration):
 
     div = ""
     fig = None
+    data = []
     if duration == "none":
         #print("Not implemented: none")
         pass
     elif duration == "all":
         #print("all")
         # Get plot HTML code
-        div, fig = plotDatabase()
+        data = queryDatabase("envData.db", "all")
+        #div, fig = plotDatabase(data)
     elif duration == "day":
-        #print("Not implemented: day")
-        pass
+        data = queryDatabase("envData.db", "lastDay")
+        #div, fig = plotDatabase(data)
     elif duration == "week":
-        #print("Not implemented: week")
-        pass
+        data = queryDatabase("envData.db", "lastWeek")
+        #div, fig = plotDatabase(data)
     elif duration == "month":
-        #print("Not implemented: month")
-        pass
+        data = queryDatabase("envData.db", "lastMonth")
+        #div, fig = plotDatabase(data)
     elif duration == "year":
-        #print("Not implemented: year")
-        pass
-    elif duration == "realtime":
-        pass
+        data = queryDatabase("envData.db", "lastYear")
+        #div, fig = plotDatabase(data)
     else:
         pass
 
-    # Load HTML page template
-    #template = loader.get_template("EnvData/display.html")
-    context = {'div': div}
+    temperatureTable = list()
+    humidityTable = list()
+    pressureTable = list()
+    for i, row in enumerate(data):
+        t = float(datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S").strftime('%s')) * 1000
+        temperatureTable.append([t, row[1]])
+        humidityTable.append([t, row[2]])
+        pressureTable.append([t, row[3]])
+
+    context = {'div': div, \
+    'temperatureTable' : json.dumps(temperatureTable), \
+    'humidityTable' : json.dumps(humidityTable), \
+    'pressureTable' : json.dumps(pressureTable)}
     # Return HTML page with plot
     return render(request, "EnvData/display.html", context)
 

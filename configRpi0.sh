@@ -5,7 +5,7 @@ sudo apt upgrade
 sudo apt update
 
 # General
-sudo apt install -y i2c-tools git build-essential
+sudo apt install -y i2c-tools build-essential git subversion
 
 # Database
 sudo apt install -y sqlite3
@@ -24,6 +24,9 @@ sudo apt install -y samba samba-common-bin
 sudo apt install -y apt-transport-https ca-certificates software-properties-common
 curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
 sudo usermod -aG docker $USER
+
+# Stream video via html
+sudo apt install -y motion gstreamer1.0 ffmpeg libjpeg8-dev imagemagick
 
 # Python
 sudo apt install -y python python-dev python-pip python-picamera python-numpy 

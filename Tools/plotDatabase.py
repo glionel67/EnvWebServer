@@ -13,28 +13,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.offline import plot
 
-def plotDatabase():
+def plotDatabase(data):
     """Plot the content of the database using plotly and return the html code"""
-    databaseFileName = 'envData.db'
-    conn = sqlite3.connect(databaseFileName)
-    cursor = conn.cursor()
-
-    # Print database content
-    #print ("Database contents:\n")
-
-    #print("BME280...")
-    data = []
-    cursor.execute("SELECT * FROM bme280")
-    for row in cursor:
-        line = [elem for elem in row]
-        data.append(line)
-        #print(line)
-
-    # Sort data by time
-    #data.sort(key = lambda elem: datetime.strptime(elem[0], '%d-%m-%Y'))
-
-    #data = [ [datetime.strptime(row[0], '%d-%m-%Y'), row[1]] for row in data]
-
     x = []
     yt = []
     yh = []
@@ -75,11 +55,29 @@ def plotDatabase():
         show_link=False, link_text="", \
         include_plotlyjs=False)
 
-    conn.close()
-    
     return div, fig
 
 if __name__ == "__main__":
-    div, fig = plotDatabase()
+    # Open database file
+    databaseFileName = 'envData.db'
+    if len(sys.argv) > 1:
+        databaseFileName = sys.argv[1]
+    conn = sqlite3.connect(databaseFileName)
+    cursor = conn.cursor()
+
+    # Print database content
+    #print("Database contents:\n")
+
+    data = []
+    cursor.execute("SELECT * FROM bme280")
+    for row in cursor:
+        line = [elem for elem in row]
+        data.append(line)
+        #print(line)
+
+    # Close database file
+    conn.close()
+
+    div, fig = plotDatabase(data)
     print(div)
     fig.show(renderer="browser")

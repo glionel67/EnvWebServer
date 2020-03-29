@@ -4,7 +4,11 @@
 import sqlite3 as sq
 import sys
 
-conn = sq.connect('envData.db')
+databaseFileName = 'envData.db'
+if len(sys.argv) > 1:
+    databaseFileName = sys.argv[1]
+
+conn = sq.connect(databaseFileName)
 with conn:
     cursor = conn.cursor()
     cursor.execute("DROP TABLE IF EXISTS bme280")

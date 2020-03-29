@@ -27,13 +27,18 @@ RUN sudo apt install -y apt-transport-https ca-certificates software-properties-
 RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
 RUN sudo usermod -aG docker $USER
 
+# Stream video via html
+sudo apt install -y motion
+
 # Python
 RUN sudo apt install -y python python-dev python-pip python-picamera python-numpy 
 RUN sudo apt install -y python3 python3-dev python3-pip python3-picamera python3-numpy
 RUN sudo apt install -y python-smbus python-mysqldb
 RUN sudo apt install -y python-gpiozero python3-gpiozero python-pigpio python3-pigpio
 RUN python -m pip install Django
+RUN python3 -m pip install Django
 RUN python -m pip install plotly==4.5.2
+RUN python3 -m pip install plotly==4.5.2
 
 # Time/ntp
 RUN sudo apt install ntp
