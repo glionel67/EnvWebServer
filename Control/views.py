@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-# TODO: pap these values to the real states of the RPi IOs
+# TODO: map these values to the real states of the RPi IOs
 pumpState = "OFF" # "ON"/"OFF"
 ev1State = "OFF" # "ON"/"OFF"
 ev2State = "OFF" # "ON"/"OFF"

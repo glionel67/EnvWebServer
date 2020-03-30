@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EnvData</title>
   <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 </head>
@@ -19,6 +21,18 @@
     <li><a href="/EnvData/display/all">All</a></li>
     <li><a href="/EnvData/realtime">Realtime</a></li>
   </ul>
+  <h2>Current value:</h2>
+  <table><tr>
+    <td>
+      <div id="container-temperature" style="height: 200px; width: 400px" class="chart-container"></div>
+    </td>
+    <td>
+      <div id="container-humidity" style="height: 200px; width: 400px" class="chart-container"></div>
+    </td>
+    <td>
+      <div id="container-pressure" style="height: 200px; width: 400px" class="chart-container"></div>
+    </td>
+  </tr></table>
   <h2>Plot:</h2>
   <!--{% autoescape off %}
   {{div}}
@@ -32,9 +46,195 @@
       window.parent.location = window.parent.location.href;
     }
 
+    // The temperature gauge
+    var chartTemp = Highcharts.chart({
+      chart: { 
+        type: 'solidgauge',
+        renderTo : 'container-temperature'
+      },
+
+      title: { text: 'Temperature' },
+
+      pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+          backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+          innerRadius: '60%',
+          outerRadius: '100%',
+          shape: 'arc'
+         }
+      },
+      plotOptions: {
+        solidgauge: {
+          dataLabels: {
+            y: 5,
+            borderWidth: 0,
+            useHTML: true
+          }
+        }
+      },
+
+      credits: {
+          enabled: false
+      },
+      
+      yAxis: {
+        stops: [
+          [0.1, '#0000FF'], // blue
+          [0.5, '#F633FF'], // ?
+          [0.9, '#DF5353'] // red
+        ],
+        min: -40,
+        max: 60,
+        title: null
+      },
+
+      series: [{
+        name: 'Temperature',
+        data: [{{lastTemp}}],
+        dataLabels: {
+          format:
+            '<div style="text-align:center">' +
+            '<span style="font-size:18px">{y:.2f} °C</span><br/>' +
+            '</div>'
+          },
+          tooltip: {
+            valueSuffix: ' °C'
+          }
+      }]
+    });
+
+    // The humidity gauge
+    var chartHumi = Highcharts.chart({
+      chart: { 
+        type: 'solidgauge',
+        renderTo : 'container-humidity'
+      },
+
+      title: { text: 'Humidity' },
+
+      pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+          backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+          innerRadius: '60%',
+          outerRadius: '100%',
+          shape: 'arc'
+         }
+      },
+      plotOptions: {
+        solidgauge: {
+          dataLabels: {
+            y: 5,
+            borderWidth: 0,
+            useHTML: true
+          }
+        }
+      },
+
+      credits: {
+          enabled: false
+      },
+
+      yAxis: {
+        stops: [
+          [0.1, '#DDFB00'], // yellow
+          [0.5, '#00FB0A'], // ?
+          [0.9, '#0000FF'] // red
+        ],
+        min: 0,
+        max: 100,
+        title: null
+      },
+
+      series: [{
+        name: 'Humidity',
+        data: [{{lastHumi}}],
+        dataLabels: {
+          format:
+            '<div style="text-align:center">' +
+            '<span style="font-size:18px">{y:.2f} %</span><br/>' +
+            '</div>'
+          },
+          tooltip: {
+            valueSuffix: ' %'
+          }
+      }]
+    });
+
+    // The pressure gauge
+    var chartPres = Highcharts.chart({
+      chart: { 
+        type: 'solidgauge',
+        renderTo : 'container-pressure'
+      },
+
+      title: { text: 'Pressure' },
+
+      pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+          backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+          innerRadius: '60%',
+          outerRadius: '100%',
+          shape: 'arc'
+         }
+      },
+      plotOptions: {
+        solidgauge: {
+          dataLabels: {
+            y: 5,
+            borderWidth: 0,
+            useHTML: true
+          }
+        }
+      },
+
+      credits: {
+          enabled: false
+      },
+
+      yAxis: {
+        stops: [
+          [0.1, '#DDFB00'], // yellow
+          [0.5, '#00FB0A'], // ?
+          [0.9, '#0000FF'] // red
+        ],
+        min: 940,
+        max: 1050,
+        title: null
+      },
+
+      series: [{
+        name: 'Pressure',
+        data: [{{lastPres}}],
+        dataLabels: {
+          format:
+            '<div style="text-align:center">' +
+            '<span style="font-size:18px">{y:4.2f} Pa</span><br/>' +
+            '</div>'
+          },
+          tooltip: {
+            valueSuffix: ' Pa'
+          }
+      }]
+    });
+
     // Temperature plot
     var chartT = new Highcharts.Chart({
-      chart:{ renderTo : 'chart-temperature' },
+      chart: { renderTo : 'chart-temperature' },
       title: { text: 'Temperature' },
       series: [{
         showInLegend: false,

@@ -26,6 +26,9 @@ def display(request, duration):
 
     #print("duration={}".format(duration))
 
+    lastEntry = queryDatabase("envData.db", "lastEntry")
+    lastTemp, lastHumi, lastPres = lastEntry[0][1], lastEntry[0][2], lastEntry[0][3]
+
     div = ""
     fig = None
     data = []
@@ -52,6 +55,7 @@ def display(request, duration):
     else:
         pass
 
+    print(data)
     temperatureTable = list()
     humidityTable = list()
     pressureTable = list()
@@ -61,7 +65,8 @@ def display(request, duration):
         humidityTable.append([t, row[2]])
         pressureTable.append([t, row[3]])
 
-    context = {'div': div, \
+    context = {'div': div, 'lastTemp' : lastTemp, \
+    'lastHumi' : lastHumi, 'lastPres' : lastPres, \
     'temperatureTable' : json.dumps(temperatureTable), \
     'humidityTable' : json.dumps(humidityTable), \
     'pressureTable' : json.dumps(pressureTable)}

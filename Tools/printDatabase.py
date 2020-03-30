@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Python script used to print the content of a database"""
 
 import sqlite3

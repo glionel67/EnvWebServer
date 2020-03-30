@@ -16,38 +16,36 @@ def queryDatabase(databaseFileName, request="lastDay"):
 
     # Get current datetime
     currentDatetime = datetime.now()
-    print("currentDatetime={}".format(currentDatetime))
+    #print("currentDatetime={}".format(currentDatetime))
 
     if request == "lastDay":
         yeasterday = currentDatetime - timedelta(days=1)
-        print("yeasterday={}".format(yeasterday))
         yeasterday = yeasterday.date()
-        print("yeasterday={}".format(yeasterday))
+        #print("yeasterday={}".format(yeasterday))
         query = "SELECT * FROM bme280 WHERE (date >= '{}')".format(yeasterday)
     elif request == "lastWeek":
         lastWeek = currentDatetime - timedelta(days=7)
-        print("lastWeek={}".format(lastWeek))
         lastWeek = lastWeek.date()
-        print("lastWeek={}".format(lastWeek))
+        #print("lastWeek={}".format(lastWeek))
         query = "SELECT * FROM bme280 WHERE (date >= '{}')".format(lastWeek)
     elif request == "lastMonth":
         lastMonth = currentDatetime - timedelta(days=31)
-        print("lastMonth={}".format(lastMonth))
         lastMonth = lastMonth.date()
-        print("lastMonth={}".format(lastMonth))
+        #print("lastMonth={}".format(lastMonth))
         query = "SELECT * FROM bme280 WHERE (date >= '{}')".format(lastMonth)
     elif request == "lastYear":
         lastYear = currentDatetime - timedelta(days=365)
-        print("lastYear={}".format(lastYear))
         lastYear = lastYear.date()
-        print("lastYear={}".format(lastYear))
+        #print("lastYear={}".format(lastYear))
         query = "SELECT * FROM bme280 WHERE (date >= '{}')".format(lastYear)
     elif request == "all":
         query = "SELECT * FROM bme280"
+    elif request == "lastEntry":
+        query = "SELECT * FROM bme280 ORDER BY date DESC LIMIT 1"
     else:
         print("Invalid request, options are: lastDay, lastWeek, lastMonth, lastYear.")
         return []
-    print("query={}".format(query))
+    #print("query={}".format(query))
 
     # Open database file
     conn = None
@@ -75,6 +73,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         databaseFileName = sys.argv[1]
     #print("databaseFileName={}".format(databaseFileName))
-    request = "lastDay" # "lastDay", "lastWeek", "lastMonth", "lastYear", "all"
+    # Options: "lastDay", "lastWeek", "lastMonth", "lastYear", "all", "lastEntry"
+    request = "lastEntry"
     data = queryDatabase(databaseFileName, request)
     print(data)
