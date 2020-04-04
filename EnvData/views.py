@@ -55,7 +55,6 @@ def display(request, duration):
     else:
         pass
 
-    print(data)
     temperatureTable = list()
     humidityTable = list()
     pressureTable = list()
